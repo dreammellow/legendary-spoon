@@ -1,0 +1,63 @@
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
+  // Handle OAuth error redirects
+  if (pathname === '/airdrop' && request.nextUrl.searchParams.get('error') === 'AccessDenied') {
+    return NextResponse.redirect(new URL('/auth/error?error=AccessDenied', request.url))
+  }
+
+  // Skip maintenance check for specific routes
+  if (
+    pathname === '/maintenance' ||
+    pathname.startsWith('/api/') ||
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/_next/')
+  ) {
+    return NextResponse.next()
+  }
+
+  // Check maintenance mode from API
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+    const maintenanceResponse = await fetch(`${apiUrl}/api/admin/maintenance/status`, {
+      method: 'GET',
+      headers: { 
+        'Content-Type': 'application/json',
+        'User-Agent': 'NextJS-Middleware'
+      },
+      // Add timeout to prevent hanging
+      signal: AbortSignal.timeout(5000)
+    })
+
+    if (maintenanceResponse.ok) {
+      const data = await maintenanceResponse.json()
+      if (data.enabled) {
+        return NextResponse.redirect(new URL('/maintenance', request.url))
+      }
+    }
+  } catch (error) {
+    // Log error in development, but continue in production
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Maintenance check failed:', error)
+    }
+  }
+
+  return NextResponse.next()
+}
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
+  runtime: 'experimental-edge',
+}
