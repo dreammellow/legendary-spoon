@@ -7,6 +7,13 @@ services:
     runtime: postgresql
     version: "15"
     startCommand: "postgres"
+    envVars:
+      - key: POSTGRES_DB
+        value: cryptoairdrop
+      - key: POSTGRES_USER
+        value: postgres
+      - key: POSTGRES_PASSWORD
+        generateValue: true
 
   # Redis Cache
   - type: redis
