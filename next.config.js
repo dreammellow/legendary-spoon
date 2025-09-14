@@ -147,7 +147,7 @@ const nextConfig = {
     output: 'standalone',
     // Optimize images
     images: {
-      ...nextConfig.images,
+      domains: ['localhost', 'cryptoairdrop-backend.onrender.com'],
       unoptimized: false,
       formats: ['image/webp', 'image/avif'],
     },
