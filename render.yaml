@@ -4,7 +4,6 @@ services:
     name: cryptoairdrop-db
     plan: free
     region: oregon
-    runtime: postgres
     startCommand: "postgres"
     envVars:
       - key: POSTGRES_DB
