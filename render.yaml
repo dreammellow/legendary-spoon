@@ -4,6 +4,9 @@ services:
     name: cryptoairdrop-db
     plan: free
     region: oregon
+    runtime: postgresql
+    version: "15"
+    startCommand: "postgres"
 
   # Redis Cache
   - type: redis
