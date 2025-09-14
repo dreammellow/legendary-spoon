@@ -18,6 +18,7 @@ services:
     name: cryptoairdrop-redis
     plan: free
     maxmemoryPolicy: allkeys-lru
+    ipAllowList: []
 
   # FastAPI Backend
   - type: web
@@ -66,10 +67,6 @@ services:
           name: cryptoairdrop-backend
           envVarKey: RENDER_EXTERNAL_URL
       - key: NEXT_PUBLIC_API_BASE_URL
-        fromService:
-          type: web
-          name: cryptoairdrop-backend
-          envVarKey: RENDER_EXTERNAL_URL
         value: ${NEXT_PUBLIC_API_URL}/api
       - key: NEXTAUTH_URL
         value: https://cryptoairdrop-frontend.onrender.com
