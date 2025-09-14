@@ -1,6 +1,6 @@
 services:
   # PostgreSQL Database
-    - type: pserv
+  - type: pserv
     name: cryptoairdrop-db
     plan: free
     region: oregon
