@@ -4,14 +4,6 @@ services:
     name: cryptoairdrop-db
     plan: free
     region: oregon
-    startCommand: "postgres"
-    envVars:
-      - key: POSTGRES_DB
-        value: cryptoairdrop
-      - key: POSTGRES_USER
-        value: postgres
-      - key: POSTGRES_PASSWORD
-        generateValue: true
 
   # Redis Cache
   - type: redis
