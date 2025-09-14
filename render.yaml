@@ -5,7 +5,6 @@ services:
     plan: free
     region: oregon
     runtime: postgresql
-    version: "15"
     startCommand: "postgres"
     envVars:
       - key: POSTGRES_DB
@@ -14,7 +13,6 @@ services:
         value: postgres
       - key: POSTGRES_PASSWORD
         generateValue: true
-    healthCheckPath: /health
 
   # Redis Cache
   - type: redis
