@@ -12,6 +12,8 @@ services:
         value: postgres
       - key: POSTGRES_PASSWORD
         generateValue: true
+      - key: DATABASE_URL
+        value: postgresql://postgres:${POSTGRES_PASSWORD}@cryptoairdrop-db:5432/cryptoairdrop
 
   # Redis Cache
   - type: redis
@@ -28,9 +30,10 @@ services:
     plan: free
     envVars:
       - key: DATABASE_URL
-        fromDatabase:
+        fromService:
+          type: web
           name: cryptoairdrop-db
-          property: connectionString
+          envVarKey: DATABASE_URL
       - key: REDIS_URL
         fromService:
           type: redis
