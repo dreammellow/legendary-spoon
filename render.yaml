@@ -1,19 +1,9 @@
 services:
   # PostgreSQL Database
-  - type: web
+  - type: pserv
     name: cryptoairdrop-db
-    env: docker
-    dockerfilePath: ./backend/Dockerfile.postgres
     plan: free
-    envVars:
-      - key: POSTGRES_DB
-        value: cryptoairdrop
-      - key: POSTGRES_USER
-        value: postgres
-      - key: POSTGRES_PASSWORD
-        generateValue: true
-      - key: DATABASE_URL
-        value: postgresql://postgres:${POSTGRES_PASSWORD}@cryptoairdrop-db:5432/cryptoairdrop
+    region: oregon
 
   # Redis Cache
   - type: redis
@@ -30,10 +20,9 @@ services:
     plan: free
     envVars:
       - key: DATABASE_URL
-        fromService:
-          type: web
+        fromDatabase:
           name: cryptoairdrop-db
-          envVarKey: DATABASE_URL
+          property: connectionString
       - key: REDIS_URL
         fromService:
           type: redis
